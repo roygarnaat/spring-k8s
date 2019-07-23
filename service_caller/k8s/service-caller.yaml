@@ -1,0 +1,46 @@
+########################################################################################################################
+####        Workload Service Caller                                                                                 ####
+########################################################################################################################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-caller
+  labels:
+    app: service-caller
+    tier: backend
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    app: service-caller
+    tier: backend
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: service-caller
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-caller
+        tier: backend
+    spec:
+      containers:
+      - name: service-caller
+        image: leonelcs/service_caller
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 8080

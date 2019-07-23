@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: service-1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-1
+        tier: backend
+    spec:
+      containers:
+      - name: service-1
+        image: leonelcs/service_1
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        ports:
+        - containerPort: 8989
